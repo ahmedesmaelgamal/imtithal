@@ -183,13 +183,35 @@ class DummyDataSeeder extends Seeder
             }
         }
 
+        // Main Areas
+        $mainAreas = collect();
+        $accomodations = [
+            "مساكن مكه",
+            "مساكن المدينه",
+            "مطار مكه",
+            "مطار المدينه",
+        ];
+
+        foreach ($accomodations as $name) {
+            $mainAreas->push(Area::create([
+                "name" => $name,
+                'location' => $faker->city,
+                'latitude' => (string) $faker->latitude(21.20, 21.70),
+                'longitude' => (string) $faker->longitude(39.40, 40.00),
+                'status' => 1,
+                'season_id' => $season->id,
+                'type' => 'main'
+            ]));
+        }
+
         // Areas + locations + points + teams
         $areas = collect();
         foreach ($axes as $axis) {
             for ($i = 1; $i <= 3; $i++) {
                 $area = Area::query()->create([
                     'name' => "{$axis->name} Area {$i}",
-                    'type' => 'main',
+                    'type' => 'sub',
+                    'parent_id' => $mainAreas->random()->id,
                     'season_id' => $season->id,
                 ]);
                 $areas->push($area);
@@ -564,24 +586,7 @@ class DummyDataSeeder extends Seeder
             ]);
         }
 
-        $accomodations = [
-            "مساكن مكه",
-            "مساكن المدينه",
-            "مطار مكه",
-            "مطار المدينه",
-        ];
 
-        foreach ($accomodations as $name) {
-            Area::create([
-                "name" => $name,
-                'location' => $faker->city,
-                'latitude' => (string) $faker->latitude(21.20, 21.70),
-                'longitude' => (string) $faker->longitude(39.40, 40.00),
-                'status' => 1,
-                'season_id' => $season->id,
-                'type' => 'sub'
-            ]);
-        }
 
         $trips = [
             "رحلة مكه",

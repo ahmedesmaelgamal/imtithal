@@ -32,8 +32,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login', [AuthController::class, 'login']);
 
 
-    Route::get('getAllAxes', [\App\Http\Controllers\Api\AdvancedInquiriesController::class, 'getAllAxes']);
-    Route::post('addQuestions', [\App\Http\Controllers\Api\AdvancedInquiriesController::class, 'addQuestions']);
+    Route::get('getAllAreas', [\App\Http\Controllers\Api\AreaController::class, 'getAllAreas']);
 
 
     //auth
