@@ -52,7 +52,7 @@ class UserService extends BaseService
     use OneSignalNotification;
 
     public function __construct(
-        User                            $objModel,
+        protected User                  $objModel,
         protected Attendance            $attendance,
         protected Alert                 $alert,
         protected AlertUser             $alertUser,
@@ -77,6 +77,14 @@ class UserService extends BaseService
     }
 
 
+    public function getAllEmployees()
+    {
+        $employees = $this->objModel->with('roles')->get()->filter(function ($user) {
+            return $user->getRoleNames()->first() === 'مراقب';
+        });
+
+        return $this->successResponse(TeamResource::collection($employees->values()));
+    }
     public function checkin($request)
     {
         $user = auth('user')->user();

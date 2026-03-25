@@ -34,7 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('getAllAreas', [\App\Http\Controllers\Api\AreaController::class, 'getAllAreas']);
     Route::get('survey-by-area-id', [\App\Http\Controllers\Api\SurveyController::class, 'getSurveyByAreaId']);
-    Route::get('all-employees', [\App\Http\Controllers\Api\UserController::class, 'getAllEmployees']);
+    Route::get('all-employees', [UserController::class, 'getAllEmployees']);
 
 
     //auth

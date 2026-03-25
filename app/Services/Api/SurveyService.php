@@ -22,6 +22,6 @@ class SurveyService extends BaseService
             return $this->responseMsg('لا يوجد استبيانات مرتبطة بهذه المنطقة', null, 404);
         }
 
-        return $this->successResponse($area->surveys->select(["id" , "title"]));
+        return $this->successResponse($area->surveys->select(["id" , "title"  , "description"]));
     }
 }

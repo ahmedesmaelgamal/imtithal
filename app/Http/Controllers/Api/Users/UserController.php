@@ -20,6 +20,12 @@ class UserController extends Controller
 
     }
 
+    public function getAllEmployees()
+    {
+        return $this->service->getAllEmployees();
+
+    }
+
     public function checkOut(Request $request)
     {
         return $this->service->checkOut($request);
