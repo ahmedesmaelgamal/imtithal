@@ -193,6 +193,36 @@
             </div>
         </div>
     </div>
+
+    <!-- Link Survey Modal -->
+    <div class="modal fade" id="linkSurveyModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-gray d-flex flex-column align-items-start">
+                    <h5 class="text-primary fs-18">ربط الاستبيانات بالمنطقة</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="linkSurveyForm" class="row g-3">
+                        @csrf
+                        <input type="hidden" name="area_id" id="link-area-id">
+                        
+                        <div class="col-md-12">
+                            <label class="form-label fs-14 fw-500 text-primary">الاستبيانات</label>
+                            <select name="survey_ids[]" id="link-survey_ids" class="form-select w-100 js-select2" multiple>
+                                @foreach($surveys as $survey)
+                                    <option value="{{ $survey->id }}">{{ $survey->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="col-12 text-start mt-4">
+                            <button type="submit" class="main-button">حفظ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -254,7 +284,7 @@
             });
 
             // Support Select2 in Modals
-            $('#addAreaModal, #editAreaModal').on('shown.bs.modal', function () {
+            $('#addAreaModal, #editAreaModal, #linkSurveyModal').on('shown.bs.modal', function () {
                 $(this).find(".js-select2").select2({
                     dropdownParent: $(this).find(".modal-content")
                 });
@@ -386,6 +416,34 @@
                         $('#editAreaModal').modal('hide');
                         table.ajax.reload();
                         refreshMainAreas();
+                        toastr.success(res.msg);
+                    },
+                    error: function (xhr) {
+                        toastr.error('حدث خطأ ما');
+                    }
+                });
+            });
+
+            // Link Survey
+            $(document).on('click', '.link-survey', function () {
+                let id = $(this).data('id');
+                $('#link-area-id').val(id);
+                
+                $.get("{{ route('area.surveys', ':id') }}".replace(':id', id), function (data) {
+                    $('#link-survey_ids').val(data).trigger('change');
+                    $('#linkSurveyModal').modal('show');
+                });
+            });
+
+            $('#linkSurveyForm').on('submit', function (e) {
+                e.preventDefault();
+                let params = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('area.linkSurveys') }}",
+                    method: "POST",
+                    data: params,
+                    success: function (res) {
+                        $('#linkSurveyModal').modal('hide');
                         toastr.success(res.msg);
                     },
                     error: function (xhr) {

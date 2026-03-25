@@ -95,6 +95,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('/area/update/{id}', [AreaController::class, 'update'])->name('area.update');
         Route::put('/area/{id}/edit-status', [AreaController::class, 'editStatus'])->name('area.editStatus');
         Route::delete('/area/delete/{id}', [AreaController::class, 'delete'])->name('area.delete');
+        Route::get('/area/surveys/{id}', [AreaController::class, 'getAreaSurveys'])->name('area.surveys');
+        Route::post('/area/link-surveys', [AreaController::class, 'linkSurveys'])->name('area.linkSurveys');
 
         Route::get('/area-team/datatable', [AreaLocationController::class, 'areaTeamDatatable'])->name('areaTeam.datatable');
         Route::post('/area-team/store/member', [AreaLocationController::class, 'storeNewMember'])->name('areaTeam.storeNewMember');

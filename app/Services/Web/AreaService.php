@@ -35,10 +35,13 @@ class AreaService extends BaseService
             $query->where('name', '=', 'مشرف');
         })->get();
 
+        $surveys = \App\Models\Survey::all();
+
         return view('web.area.index', [
             'mainAreas' => $mainAreas,
             'teams' => $teams,
             'leaders' => $leaders,
+            'surveys' => $surveys,
         ]);
     }
 
@@ -74,6 +77,12 @@ class AreaService extends BaseService
                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                             </button>
                             <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item link-survey" href="javascript:void(0)" data-bs-toggle="modal" data-id="' . $obj->id . '">
+                                        <i class="fa-solid fa-link" style="width:18px; margin-left: 5px;"></i>
+                                        ربط استبيان
+                                    </a>
+                                </li>
                                 <li>
                                     <a class="dropdown-item edit" href="javascript:void(0)" data-bs-toggle="modal" data-id="' . $obj->id . '">
                                         <img class="" src="' . asset('web/image/edit-icon.png') . '" alt="edit" style="width:18px;">
@@ -124,7 +133,7 @@ class AreaService extends BaseService
                 'sub_leader_ids.*' => 'exists:users,id',
             ]);
 
-            $data['type'] = $data['parent_id'] ? 'sub' : 'main';
+            $data['type'] = !empty($data['parent_id']) ? 'sub' : 'main';
 
             DB::beginTransaction();
 
@@ -195,7 +204,7 @@ class AreaService extends BaseService
                 'sub_leader_ids' => 'nullable|array',
             ]);
 
-            $data['type'] = $data['parent_id'] ? 'sub' : 'main';
+            $data['type'] = !empty($data['parent_id']) ? 'sub' : 'main';
 
             DB::beginTransaction();
 
@@ -246,5 +255,32 @@ class AreaService extends BaseService
         $data = $this->model->where('id', $area_id)->first();
         $html = view('web.axes_management.print', ['data' => $data])->render();
         return response()->json(['html' => $html, 'status' => true]);
+    }
+
+    public function getAreaSurveys($id)
+    {
+        $area = $this->model->find($id);
+        if (!$area) {
+            return response()->json([]);
+        }
+        return response()->json($area->surveys->pluck('id')->toArray());
+    }
+
+    public function linkSurveys($request)
+    {
+        try {
+            $request->validate([
+                'area_id' => 'required|exists:areas,id',
+                'survey_ids' => 'nullable|array',
+                'survey_ids.*' => 'exists:surveys,id',
+            ]);
+            
+            $area = $this->model->findOrFail($request->area_id);
+            $area->surveys()->sync($request->survey_ids ?? []);
+            
+            return response()->json(['status' => true, 'msg' => 'تم ربط الاستبيانات بنجاح']);
+        } catch (\Exception $exception) {
+            return response()->json(['status' => false, 'msg' => $exception->getMessage()], 500);
+        }
     }
 }

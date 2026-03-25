@@ -33,6 +33,7 @@ Route::group(['prefix' => 'v1'], function () {
 
 
     Route::get('getAllAreas', [\App\Http\Controllers\Api\AreaController::class, 'getAllAreas']);
+    Route::get('survey-by-area-id', [\App\Http\Controllers\Api\SurveyController::class, 'getSurveyByAreaId']);
 
 
     //auth

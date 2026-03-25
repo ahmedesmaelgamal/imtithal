@@ -34,4 +34,9 @@ class Survey extends BaseModel
     {
         return $this->hasMany(SurveyQuestion::class, 'survey_id', 'id');
     }
+
+    public function areas()
+    {
+        return $this->belongsToMany(Area::class, 'area_survey', 'survey_id', 'area_id');
+    }
 }

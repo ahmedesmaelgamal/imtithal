@@ -103,5 +103,9 @@ class Area extends BaseModel
         return $this->HasOne(BusReport::class,'area_id','id')->latest();
     }
 
+    public function surveys()
+    {
+        return $this->belongsToMany(Survey::class, 'area_survey', 'area_id', 'survey_id');
+    }
 
 }
