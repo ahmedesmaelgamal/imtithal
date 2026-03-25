@@ -1,0 +1,213 @@
+<?php
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Services\Api\Map\MapService;
+use Illuminate\Http\Request;
+
+class MapController extends Controller
+{
+    public function __construct(protected MapService $mapService)
+    {
+    }
+
+
+    public function login(Request $request)
+    {
+        try {
+            return $this->mapService->login($request);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+
+    }
+
+
+
+    public function logout(Request $request)
+    {
+        try {
+        return $this->mapService->logout($request);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+    public function getBusesTimes($area_id)
+    {
+       try {
+        return $this->mapService->getBusesTimes($area_id);
+       } catch (\Exception $e) {
+           return self::ExeptionResponse();
+       }
+    }
+
+
+    public function getAreas( $axis_id)
+    {
+        try {
+            return $this->mapService->getAreas($axis_id);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+    public function getAreasWithoutAxis( )
+    {
+        try {
+            return $this->mapService->getAreasWithoutAxis();
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+    public function getAxes()
+    {
+        try {
+            return $this->mapService->getAxes();
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+    public function getAxisDetails($id)
+    {
+        try {
+            return $this->mapService->getAxisDetails($id);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+    public function getAreaDetails($id)
+    {
+        try {
+            return $this->mapService->getAreaDetails($id);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+    public function getLeaderDetails($id)
+    {
+//        try {
+            return $this->mapService->getLeaderDetails($id);
+//        } catch (\Exception $e) {
+//            return self::ExeptionResponse();
+//        }
+    }
+
+    public function getUserDetails($id)
+    {
+        try {
+            return $this->mapService->getUserDetails($id);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+    public function getNoticeDetails($id)
+    {
+        try {
+            return $this->mapService->getNoticeDetails($id);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+    public function getNotice(Request $request)
+    {
+        try {
+            return $this->mapService->getNotice($request);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+    public function getRoles( )
+    {
+        try {
+            return $this->mapService->getRoles();
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+    public function getAlerts(Request $request)
+    {
+        try {
+            return $this->mapService->getAlerts($request);
+        } catch (\Exception $e) {
+            return self::ExeptionResponse();
+        }
+    }
+
+
+    public function getDailyReportDetails(Request $request,$id)
+    {
+//        try {
+            return $this->mapService->getDailyReportDetails($request,$id);
+//        } catch (\Exception $e) {
+//            return self::ExeptionResponse();
+//        }
+    }
+
+
+    public function getFilterObjects(Request $request)
+    {
+//        try {
+            return $this->mapService->getFilterObjects($request);
+//        } catch (\Exception $e) {
+//            return self::ExeptionResponse();
+//        }
+    }
+
+    public function getDetailsForParent0(Request $request)
+    {
+        return $this->mapService->getDetailsForParent0($request);
+
+    }
+    public function getDetailsForParent1(Request $request)
+    {
+        return $this->mapService->getDetailsForParent1($request);
+
+    }
+
+    public function getDetailsForParent2(Request $request)
+    {
+        return $this->mapService->getDetailsForParent2($request);
+
+    }
+    public function getDetailsForParent3(Request $request)
+    {
+        return $this->mapService->getDetailsForParent3($request);
+
+    }
+
+    public function getDetailsForParent4(Request $request)
+    {
+        return $this->mapService->getDetailsForParent4($request);
+
+    }
+
+    public function getDetailsForParent5(Request $request)
+    {
+        return $this->mapService->getDetailsForParent5($request);
+
+    }
+    public function getDetailsForParent6(Request $request)
+    {
+        return $this->mapService->getDetailsForParent6($request);
+
+    }
+    public function getDetailsForParent7(Request $request)
+    {
+        return $this->mapService->getDetailsForParent7($request);
+
+    }
+
+    public function storeFcm(Request $request)
+    {
+        return $this->mapService->storeFcm($request);
+    }
+
+
+}

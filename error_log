@@ -1,0 +1,29 @@
+[10-Feb-2025 04:27:00 UTC] PHP Warning:  require(/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php): Failed to open stream: No such file or directory in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:00 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan:9
+Stack trace:
+#0 {main}
+  thrown in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:00 UTC] PHP Warning:  require(/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php): Failed to open stream: No such file or directory in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:00 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan:9
+Stack trace:
+#0 {main}
+  thrown in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:00 UTC] PHP Warning:  require(/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php): Failed to open stream: No such file or directory in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:00 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan:9
+Stack trace:
+#0 {main}
+  thrown in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:00 UTC] PHP Warning:  require(/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php): Failed to open stream: No such file or directory in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:00 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan:9
+Stack trace:
+#0 {main}
+  thrown in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:01 UTC] PHP Warning:  require(/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php): Failed to open stream: No such file or directory in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:01 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan:9
+Stack trace:
+#0 {main}
+  thrown in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/artisan on line 9
+[10-Feb-2025 04:27:16 UTC] PHP Warning:  Constant LARAVEL_START already defined in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/config/index.php on line 10
+[10-Feb-2025 04:27:16 UTC] PHP Warning:  require(/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/config/vendor/autoload.php): Failed to open stream: No such file or directory in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/config/index.php on line 24
+[10-Feb-2025 04:27:28 UTC] PHP Warning:  Constant LARAVEL_START already defined in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/config/index.php on line 10
+[10-Feb-2025 04:27:28 UTC] PHP Warning:  require(/home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/config/vendor/autoload.php): Failed to open stream: No such file or directory in /home/u766532697/domains/zimamapps.com/public_html/admin-rcmc/config/index.php on line 24

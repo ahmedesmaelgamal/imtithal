@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تكرار النموذج</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div id="forms-container">
+    <form class="row g-3 form-group">
+        <div class="col-12">
+            <div class="change-direction">
+                <label class="form-label fs-14 fw-500 text-primary">اسم المحور
+                    <span class="text-red">*</span>
+                </label>
+                <input type="text" class="form-control fs-12 fw-400 text-secondary bg-gray"
+                       placeholder="أدخل اسم المحور" required>
+            </div>
+        </div>
+    </form>
+</div>
+
+<button id="add-form" class="main-button blur"
+        style="background-color: transparent; margin-right: 0; padding-right: 0;">
+    <img class="h-16" src="image/plus.svg" alt="no-icon">
+    اضافة سؤال اخر
+</button>
+
+<script>
+    $(document).ready(function () {
+        $("#add-form").click(function () {
+            let newForm = $(".form-group").first().clone(); // نسخ أول نموذج
+            newForm.find("input").val(""); // تفريغ الحقول الجديدة
+            $("#forms-container").append(newForm); // إضافة النموذج الجديد
+        });
+    });
+</script>
+
+</body>
+</html>
