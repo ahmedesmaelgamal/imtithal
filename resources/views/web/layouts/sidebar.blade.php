@@ -202,7 +202,7 @@
                 </a>
             </li>
         @endcan -->
-        <!-- @can('daily_reports')
+        @can('daily_reports')
             <li>
                 <a href="{{route('daily_report.index')}}" class="link-sidebar {{ activeRoute('daily_report.index') }}">
                     <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 22 22"
@@ -214,7 +214,7 @@
                     <span>إدارة التقارير اليومية</span>
                 </a>
             </li>
-        @endcan -->
+        @endcan
         <!-- @can('notifications')
             <li>
                 <a href="{{route('alert.index')}}" class="link-sidebar {{ activeRoute('alert.index') }}">

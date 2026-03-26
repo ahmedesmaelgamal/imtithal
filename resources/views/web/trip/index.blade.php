@@ -368,6 +368,7 @@
                         d.trip_number = $('input[name="trip_number"]').val();
                         d.air_carrier = $('select[name="air_carrier"]').val();
                         d.service_provider = $('select[name="service_provider"]').val();
+                        d.main_area_id = $('select[name="main_area_id"]').val();
                         d.area_id = $('select[name="area_id"]').val();
                         d.arrival_date = $('input[name="arrival_date"]').val();
                     }
@@ -592,7 +593,6 @@
         });
     </script>
 @endsection
-
 
 
 
