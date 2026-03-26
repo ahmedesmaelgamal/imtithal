@@ -5,8 +5,6 @@ namespace App\Http\Resources\Leaders;
 use App\Enum\LeaderDailyReportAssignUserStatusEnum;
 use App\Enum\monitorType;
 use App\Enum\SideType;
-use App\Http\Resources\Users\AxisQuestionResource;
-use App\Http\Resources\Users\AxisResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,8 +28,6 @@ class LeaderDailyReportDetailsOnlyResource extends JsonResource
             'updated_at' => $this->updated_at->format('d-m-Y'),
             'monitor_type' => monitorType::from($this->dailyReport->monitor_type)->lang(),
             'side_type' => SideType::from($this->dailyReport->side_type)->lang(),
-            'axis' => new AxisResource($this->axis),
-//            'area' => new AreaResource($this->area),
             'deadline' => $this->deadline,
             'daily_report_questions' => LeaderDailyReportQuestionAnswerResource::collection($this->answers)
         ];

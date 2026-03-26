@@ -7,9 +7,6 @@ use App\Enum\DailyReportAssignUserStatusEnum;
 use App\Enum\DailyReportRejectReasonEnum;
 use App\Http\Resources\Leaders\LeaderTasksQuestionResource;
 use App\Http\Resources\MediaResource;
-use App\Http\Resources\Users\AreaResource;
-use App\Http\Resources\Users\UserResource;
-use AnswerFile;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,10 +22,10 @@ class UserDailyReportQuestionAnswerResource extends JsonResource
         return [
             'id' => $this->id,
             'daily_report_assign_user_id' => $this->daily_report_assign_user_id,
-            'axis_question' => LeaderTasksQuestionResource::make($this->axisQuestion),
+            'question' => LeaderTasksQuestionResource::make($this->surveyQuestion),
             'answer' => $this->answer,
             'question_answer' => $this->questionAnswer,
-            'question_answers' => $this->axisQuestion->answers,
+            'question_answers' => $this->surveyQuestion->answers,
             "status" => (int)$this->status,
             "status_name" => AnswerStatusEnum::from($this->status)->lang(),
             'refuse_reason' =>$this->refuse_reason? DailyReportRejectReasonEnum::from($this->refuse_reason)->lang():null,

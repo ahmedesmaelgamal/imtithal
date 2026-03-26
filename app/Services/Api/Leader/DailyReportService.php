@@ -107,10 +107,9 @@ class DailyReportService extends BaseService
     {
         $leader = auth('user')->user();
         $validated = $this->apiValidator($request->all(), [
-            'daily_report_id' => 'required|exists:daily_reports,id',
+            'survey_id' => 'required|exists:surveys,id',
             'user_id' => 'required',
             'deadline' => 'required|date',
-            'axis_id' => 'required',
             'area_id' => 'required',
         ]);
 
@@ -118,9 +117,22 @@ class DailyReportService extends BaseService
             return $validated;
         }
 
+        $survey = \App\Models\Survey::find($request->survey_id);
+
+        // Create or find a DailyReport mapped to this Survey
+        $dailyReportTemplate = $this->dailyReport->firstOrCreate(
+            ['survey_id' => $survey->id],
+            [
+                'title' => $survey->title ?? 'تقرير استبيان',
+                'description' => $survey->description ?? 'تقرير يومي تلقائي',
+                'deadline' => now(), // Generic deadline, real one is on the assign
+                'monitor_type' => '1',
+                'side_type' => '1',
+            ]
+        );
 
         $dailyReportAssign = $this->model->where('user_id', $request->user_id)
-            ->where('daily_report_id', $request->daily_report_id)
+            ->where('daily_report_id', $dailyReportTemplate->id)
             ->where('status', '<>', '4')
             ->first();
 
@@ -144,7 +156,8 @@ class DailyReportService extends BaseService
 
 
 
-        $inputs = $request->all();
+        $inputs = $request->except('survey_id');
+        $inputs['daily_report_id'] = $dailyReportTemplate->id;
         $inputs['leader_id'] = $leader->id;
         $dailyReport = $this->model->create($inputs);
         // send notification to user

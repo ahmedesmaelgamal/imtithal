@@ -60,7 +60,7 @@ class DailyReportService extends BaseService
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
-            'axis_id' => 'required',
+            'survey_id' => 'required',
             'deadline' => 'required|date|after_or_equal:today',
             'monitor_type' => 'required',
             'side_type' => 'required',
@@ -98,7 +98,7 @@ class DailyReportService extends BaseService
             'id' => $dailyReport->id,
             'title' => $dailyReport->title,
             'description' => $dailyReport->description,
-            'axis_id' => $dailyReport->axis_id,
+            'survey_id' => $dailyReport->survey_id,
             'monitor_type' => $dailyReport->monitor_type,
             'side_type' => $dailyReport->side_type,
             'deadline' => $dailyReport->deadline,
@@ -112,7 +112,7 @@ class DailyReportService extends BaseService
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
-            'axis_id' => 'required',
+            'survey_id' => 'required',
             'deadline' => 'required|date|after_or_equal:today',
             'monitor_type' => 'required',
             'side_type' => 'required',

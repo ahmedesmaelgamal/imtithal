@@ -5,9 +5,6 @@ namespace App\Http\Resources\Leaders;
 use App\Enum\DailyReportAssignUserStatusEnum;
 use App\Enum\LeaderDailyReportAssignUserStatusEnum;
 use App\Http\Resources\Users\AreaResource;
-use App\Http\Resources\Users\AxisResource;
-use App\Models\AxisQuestion;
-use App\Models\DailyReportAssignUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,7 +26,6 @@ class LeaderDailyReportAssignResource extends JsonResource
             'status_name' => LeaderDailyReportAssignUserStatusEnum::from($this->status)->lang(),
             'monitor_type' => $this->dailyReport->monitor_type,
             'side_type' => $this->dailyReport->side_type,
-            'axis' => new AxisResource($this->axis),
             'area' => new AreaResource($this->area),
             'deadline' => $this->deadline,
             'user_id' => (int) $this->user->id,

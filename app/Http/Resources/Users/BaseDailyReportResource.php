@@ -6,8 +6,6 @@ use App\Enum\AnswerStatusEnum;
 use App\Enum\DailyReportAssignUserStatusEnum;
 use App\Enum\monitorType;
 use App\Enum\SideType;
-use App\Models\AxisQuestion;
-use App\Models\DailyAssignUserAnswer;
 use App\Models\DailyReportAssignUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -32,7 +30,6 @@ class BaseDailyReportResource extends JsonResource
             'monitor_type' => monitorType::from($this->monitor_type)->lang(),
             'side_type' => SideType::from($this->side_type)->lang(),
             'deadline' => (new \DateTime($this->deadline))->format('d-m-Y'),
-            'axis' => new AxisResource($dailyReportAssignUser->axis),
             'area' => new AreaResource($this->area),
             'progress' => (int)$this->progress,
         ];

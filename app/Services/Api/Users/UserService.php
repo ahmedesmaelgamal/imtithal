@@ -31,8 +31,8 @@ use App\Models\AlertUser;
 use App\Models\Area;
 use App\Models\AreaTeam;
 use App\Models\Attendance;
-use App\Models\Axis;
-use App\Models\AxisQuestion;
+use App\Models\Survey;
+use App\Models\SurveyQuestion;
 use App\Models\DailyAssignUserAnswer;
 use App\Models\DailyReport;
 use App\Models\DailyReportAssignUser;
@@ -61,8 +61,8 @@ class UserService extends BaseService
         protected DailyReportAssignUser $dailyReportAssignUser,
         protected ViolationReport       $violationReport,
         protected DailyAssignUserAnswer $dailyAssignUserAnswer,
-        protected AxisQuestion          $axisQuestion,
-        protected Axis                  $axis,
+        protected SurveyQuestion        $surveyQuestion,
+        protected Survey                $survey,
         protected DailyReport           $dailyReport,
         protected Media                 $media,
         protected Notice                $notice,
@@ -279,7 +279,7 @@ class UserService extends BaseService
         $reports = $this->dailyReport->whereIn('id', $dailyReportsUsers->pluck('daily_report_id'))->take(3)->get()->map(function ($report) use ($dailyReportsUsers) {
             $report->status = $dailyReportsUsers->where('daily_report_id', $report->id)->first()->status;
             $report->deadline = $dailyReportsUsers->where('daily_report_id', $report->id)->first()->deadline;
-            $dailyReportsQuestions = $this->axisQuestion->where('axis_id', $dailyReportsUsers->where('daily_report_id', $report->id)->first()->axis_id)->count();
+            $dailyReportsQuestions = SurveyQuestion::where('survey_id', $report->survey_id)->count();
 
             $questionsAnswered = $this->dailyAssignUserAnswer->where('daily_report_assign_user_id', $dailyReportsUsers->where('daily_report_id', $report->id)->first()->id)
                 ->where('user_id', $dailyReportsUsers->where('daily_report_id', $report->id)->first()->user_id)
@@ -404,7 +404,7 @@ class UserService extends BaseService
             $report->deadline = $dailyReportUser->deadline;
             $report->area = $this->area->find($dailyReportUser->area_id);
 
-            $dailyReportsQuestions = $this->axisQuestion->where('axis_id', $dailyReportUser->axis_id)->count();
+            $dailyReportsQuestions = SurveyQuestion::where('survey_id', $report->survey_id)->count();
 
             $questionsAnswered = $this->dailyAssignUserAnswer->where('daily_report_assign_user_id', $dailyReportUser->id)
                 ->where('user_id', $dailyReportUser->user_id)
@@ -429,7 +429,7 @@ class UserService extends BaseService
         $dailyReport->deadline = $dailyReportUser->deadline;
         $dailyReport->area = $this->area->find($dailyReportUser->area_id);
 
-        $dailyReport->dailyReportsQuestions = $this->axisQuestion->where('axis_id', $dailyReportUser->axis_id);
+        $dailyReport->dailyReportsQuestions = SurveyQuestion::where('survey_id', $dailyReport->survey_id);
         $dailyReport->questionsAnswered = $this->dailyAssignUserAnswer->where('user_id', $dailyReportUser->user_id)->where('daily_report_assign_user_id', $dailyReportUser->id);
         $dailyReport->progress = $dailyReport->dailyReportsQuestions->count() > 0 ? ($dailyReport->questionsAnswered->count() / $dailyReport->dailyReportsQuestions->count()) * 100 : 0;
 
@@ -545,10 +545,10 @@ class UserService extends BaseService
         // Validation
         $validator = $this->apiValidator($request->all(), [
             'daily_report_id' => 'required|exists:daily_reports,id',
-            'axis_question_ids' => 'required|array',
-            'axis_question_ids.*' => 'exists:axis_questions,id',
+            'survey_question_ids' => 'required|array',
+            'survey_question_ids.*' => 'exists:servay_questions,id',
             'question_answer_ids' => 'nullable|array',
-            'question_answer_ids.*' => 'exists:question_answers,id',
+            'question_answer_ids.*' => 'exists:survey_question_answers,id',
             'answers' => 'nullable|array',
             'answers.*' => 'string',
             'files' => 'nullable|array',
@@ -566,18 +566,18 @@ class UserService extends BaseService
             ->first();
         $dailyReportAssignUser->update(['status' => '1']);
 
-        for ($i = 0; $i < count($request->axis_question_ids); $i++) {
+        for ($i = 0; $i < count($request->survey_question_ids); $i++) {
             // Check if user answered this question before
             $existingAnswer = $this->dailyAssignUserAnswer
                 ->where('daily_report_assign_user_id', $dailyReportAssignUser->id)
-                ->where('axis_question_id', $request->axis_question_ids[$i])
+                ->where('survey_question_id', $request->survey_question_ids[$i])
                 ->where('user_id', Auth::guard('user')->user()->id)
                 ->first();
 
             if ($existingAnswer) {
                 $existingAnswer->update([
                     'daily_report_assign_user_id' => $dailyReportAssignUser->id,
-                    'axis_question_id' => $request->axis_question_ids[$i],
+                    'survey_question_id' => $request->survey_question_ids[$i],
                     'answer' => $request->answers[$i] ?? null,
                     'question_answer_id' => $request->question_answer_ids[$i] ?? null,
                     'user_id' => Auth::guard('user')->user()->id,
@@ -599,7 +599,7 @@ class UserService extends BaseService
             } else {
                 $newAnswer = $this->dailyAssignUserAnswer->create([
                     'daily_report_assign_user_id' => $dailyReportAssignUser->id,
-                    'axis_question_id' => $request->axis_question_ids[$i],
+                    'survey_question_id' => $request->survey_question_ids[$i],
                     'answer' => $request->answers[$i] ?? null,
                     'question_answer_id' => $request->question_answer_ids[$i] ?? null,
                     'user_id' => Auth::guard('user')->user()->id,
@@ -618,9 +618,9 @@ class UserService extends BaseService
             $answersCount = $this->dailyAssignUserAnswer
                 ->where('daily_report_assign_user_id', $dailyReportAssignUser->id)
                 ->count();
-            $dailyReportQuestionsCount = $this->axisQuestion->where(
-                'axis_id',
-                $this->dailyReport->where('id', $request->daily_report_id)->first()->axis_id
+            $dailyReportQuestionsCount = SurveyQuestion::where(
+                'survey_id',
+                $this->dailyReport->where('id', $request->daily_report_id)->first()->survey_id
             )->count();
 
             if ($answersCount != $dailyReportQuestionsCount) {

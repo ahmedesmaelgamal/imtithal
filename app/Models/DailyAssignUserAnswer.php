@@ -11,7 +11,7 @@ class DailyAssignUserAnswer extends BaseModel
 
     protected $fillable = [
         'daily_report_assign_user_id',
-        'axis_question_id',
+        'survey_question_id',
         'answer',
         'question_answer_id',
         'status',
@@ -27,9 +27,9 @@ class DailyAssignUserAnswer extends BaseModel
 
     }
 
-    public function axisQuestion()
+    public function surveyQuestion()
     {
-        return $this->belongsTo(AxisQuestion::class);
+        return $this->belongsTo(SurveyQuestion::class);
     }
 
     public function questionAnswer()

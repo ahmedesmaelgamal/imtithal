@@ -12,31 +12,26 @@ class DailyReport extends BaseModel
     protected $fillable = [
         'title',
         'description',
-        'axis_id',
+        'survey_id',
         'monitor_type',
         'side_type',
         'deadline',
     ];
 
-    public function axis()
+    public function survey()
     {
-        return $this->belongsTo(Axis::class);
+        return $this->belongsTo(Survey::class);
     }
 
-
+    public function surveyQuestions()
+    {
+        return $this->hasManyThrough(SurveyQuestion::class, Survey::class, 'id', 'survey_id', 'survey_id', 'id');
+    }
 
     public function dailyReportAssignUser()
     {
 
         return $this->hasMany(DailyReportAssignUser::class);
     }
-
-    public function questions()
-    {
-
-        return $this->hasMany(AxisQuestion::class);
-
-    }
-
 
 }

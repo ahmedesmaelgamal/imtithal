@@ -17,7 +17,7 @@ class DailyReportFactory extends Factory
         return [
             'title' => $faker->sentence,
             'description' => $faker->paragraph,
-            'axis_id' => $faker->numberBetween(1, 10),
+            'survey_id' => $faker->numberBetween(1, 10),
             'monitor_type' => $faker->randomElement(['0', '1','2']),
             'side_type' => $faker->randomElement(['0', '1','2']),
             'deadline' => $faker->date('Y-m-d'),
