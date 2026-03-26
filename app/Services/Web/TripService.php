@@ -2,23 +2,25 @@
 
 namespace App\Services\Web;
 
+use App\Models\Area;
 use App\Models\Trip;
 use App\Services\BaseService;
 use Illuminate\Http\JsonResponse;
 
 class TripService extends BaseService
 {
-    public function __construct(Trip $model)
+    public function __construct(Trip $model , protected Area $area)
     {
         parent::__construct($model);
     }
 
     public function index()
     {
-        $areas = \App\Models\Area::all();
+        $mainAreas = $this->area->where("type" , "main")->get();
+        $subAreas = $this->area->where("type" , "sub")->get();
         $airCarriers = $this->model->distinct()->pluck('air_carrier')->filter();
         $serviceProviders = $this->model->distinct()->pluck('service_provider')->filter();
-        return view('web.trip.index', compact('areas', 'airCarriers', 'serviceProviders'));
+        return view('web.trip.index', compact('mainAreas', 'subAreas', 'airCarriers', 'serviceProviders'));
     }
 
     public function indexDatatable()

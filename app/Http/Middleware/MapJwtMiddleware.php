@@ -28,7 +28,7 @@ class MapJwtMiddleware
         } catch (\Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
                 return response()->json([
-                    'msg' => 'الرمز غير صالح',
+                    'msg' => 'التوكين غير صالح',
                     'data' => null,
                     'status' => 407
                 ]);

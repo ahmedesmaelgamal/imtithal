@@ -46,4 +46,5 @@ class DailyReportAssignUser extends BaseModel
         return $this->belongsTo(User::class, 'leader_id');
 
     }
+    
 }

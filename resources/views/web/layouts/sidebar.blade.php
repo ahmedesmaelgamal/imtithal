@@ -148,7 +148,7 @@
             </li>
         @endcan
 
-        @can('axes')
+        <!-- @can('axes')
             <li>
                 <a href="{{route('axesManagement')}}" class="link-sidebar {{ activeRoute('axesManagement') }}">
                     <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 22 22"
@@ -160,7 +160,7 @@
                     <span>إدارة التقارير</span>
                 </a>
             </li>
-        @endcan
+        @endcan -->
         {{-- @can('buses')--}}
         <!-- <li>
             <a href="{{route('buses.index')}}" class="link-sidebar {{  activeRoute('buses.index') }}">
@@ -262,7 +262,7 @@
 
 
         @can('logs')
-            <li>
+            <!-- <li>
                 <a href="{{route('activity_logs.index')}}" class="link-sidebar  {{ activeRoute('activity_logs.index') }}">
 
                     <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 22 22"
@@ -273,11 +273,11 @@
                     </svg>
                     <span>سجل عمليات النظام</span>
                 </a>
-            </li>
+            </li> -->
         @endcan
 
         {{-- @can('excel_import_export')--}}
-        <li>
+        <!-- <li>
             <a href="{{route('excel_import_export.index')}}"
                 class="link-sidebar  {{ activeRoute('excel_import_export.index') }}">
 
@@ -289,7 +289,7 @@
                 </svg>
                 <span>استيراد وتصدير البيانات</span>
             </a>
-        </li>
+        </li> -->
         {{-- @endcan--}}
 
 
@@ -312,7 +312,7 @@
 
 
         {{-- @can('seasons')--}}
-        <li>
+        <!-- <li>
             <a href="{{route('seasons.index')}}" class="link-sidebar  {{ activeRoute('seasons.index') }}">
 
 
@@ -330,7 +330,7 @@
                 <span>أدارة المواسم</span>
 
             </a>
-        </li>
+        </li> -->
         {{-- @endcan--}}
 
         <li>

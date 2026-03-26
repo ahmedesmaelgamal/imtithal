@@ -106,6 +106,7 @@ class DailyReportService extends BaseService
     public function addDailyReportAssign($request)
     {
         $leader = auth('user')->user();
+        \Log::info('addDailyReportAssign request data', ['request' => $request->all()]);
         $validated = $this->apiValidator($request->all(), [
             'survey_id' => 'required|exists:surveys,id',
             'user_id' => 'required',
@@ -168,7 +169,6 @@ class DailyReportService extends BaseService
         } else {
             Log::info('تم إرسال الإشعار بنجاح', $response);
         }
-
 
         return $this->responseMsg('تمت اضافة المهمة اليومية بنجاح', LeaderDailyReportAssignResource::make($dailyReport));
     }

@@ -78,6 +78,8 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
 
+    // dailyReportDetails
+    // addDailyReportAssign
     // Leader App Routes
     Route::group(['prefix' => 'leader'], function () {
         Route::group(['middleware' => JwtMiddleware::class], function () {

@@ -79,7 +79,6 @@ class AuthService extends BaseService
         }
     }
 
-
     /**
      * Summary of sendOtp
      * @param mixed $request

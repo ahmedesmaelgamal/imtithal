@@ -76,7 +76,16 @@
                     <label class="form-label fs-14 fw-500 text-primary">المنطقة</label>
                     <select class="form-select select2-filter" name="area_id">
                         <option value="">الكل</option>
-                        @foreach($areas as $acc)
+                        @foreach($mainAreas as $acc)
+                            <option value="{{ $acc->id }}">{{ $acc->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4 col-12 mb-3">
+                    <label class="form-label fs-14 fw-500 text-primary">المنطقة</label>
+                    <select class="form-select select2-filter" name="area_id">
+                        <option value="">الكل</option>
+                        @foreach($subAreas as $acc)
                             <option value="{{ $acc->id }}">{{ $acc->name }}</option>
                         @endforeach
                     </select>

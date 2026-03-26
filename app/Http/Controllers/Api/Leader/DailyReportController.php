@@ -49,11 +49,11 @@ class DailyReportController extends Controller
 
     public function addDailyReportAssign(Request $request)
     {
-        try {
+        // try {
             return $this->dailyReportService->addDailyReportAssign($request);
-        } catch (\Exception $e) {
-            return self::ExeptionResponse();
-        }
+        // } catch (\Exception $e) {
+        //     return self::ExeptionResponse();
+        // }
     }
 
     public function DailyReportRejectReason()

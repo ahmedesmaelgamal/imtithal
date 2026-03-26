@@ -10,6 +10,7 @@ use App\Models\Area;
 use App\Models\Axis;
 use App\Models\Notice;
 use App\Models\NoticeType;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\User as ObjModel;
@@ -107,19 +108,37 @@ class ExcelImportExportService extends BaseService
 
     public function exelImportExport($data)
     {
+        $isImport = $data->input('type') === 'import';
+
+        if ($data->hasFile('file')) {
+            $file = $data->file('file');
+            Log::info('Upload debug', [
+                'isValid' => $file->isValid(),
+                'errorCode' => $file->getError(),
+                'errorMessage' => $file->getErrorMessage(),
+                'maxFilesize' => ini_get('upload_max_filesize'),
+                'postMaxSize' => ini_get('post_max_size')
+            ]);
+        } else {
+            Log::info('Upload debug: No file received in the request');
+        }
+
         $validator = \Validator::make($data->all(), [
             'type' => 'required|string|in:import,export',
             'table' => 'required|string|in:' . implode(',', array_keys($this->modelMap)),
-            'file' => 'required_if:type,import|mimes:xlsx,csv,xls',
+            'file' => $isImport ? 'required|file|mimes:xlsx,csv,xls' : 'nullable',
         ]);
 
-
         if ($validator->fails()) {
+            Log::error('ExcelImportExport validation failed', [
+                'errors' => $validator->errors()->toArray(),
+                'input' => $data->except('file'),
+            ]);
             return response()->json([
                 'msg' => $validator->errors()->first(),
                 'data' => null,
                 'status' => 422
-            ]);
+            ], 422);
         }
 
         return $data->type == 'import' ? $this->import($data) : $this->export($data);
@@ -137,6 +156,7 @@ class ExcelImportExportService extends BaseService
 
 
         if (!$modelClass) {
+            Log::error('Import failed: invalid table name', ['table' => $data->input('table')]);
             return response()->json([
                 'msg' => 'خطاء في اسم الجدول',
                 'data' => null,
@@ -152,7 +172,11 @@ class ExcelImportExportService extends BaseService
                 'status' => 200
             ]);
         } catch (\Exception $e) {
-            \Log::error('Import failed: ' . $e->getMessage());
+            Log::error('Import failed', [
+                'table' => $data->input('table'),
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             return response()->json([
                 'msg' => $e->getMessage(),
                 'data' => null,
@@ -170,6 +194,7 @@ class ExcelImportExportService extends BaseService
             return Response::download($filePath, 'example_user_import.xlsx');
         }
 
+        Log::error('Example import file not found', ['path' => $filePath]);
         return back()->with('error', 'الملف غير موجود!');
     }
 
@@ -180,6 +205,7 @@ class ExcelImportExportService extends BaseService
         $modelClass = $this->modelMap[$table] ?? null;
 
         if (!$modelClass) {
+            Log::error('Export failed: invalid table name', ['table' => $table]);
             return response()->json([
                 'msg' => 'Invalid table',
                 'status' => 400
@@ -207,7 +233,11 @@ class ExcelImportExportService extends BaseService
                 'status' => 200
             ]);
         } catch (\Exception $e) {
-            \Log::error('Export failed: ' . $e->getMessage());
+            Log::error('Export failed', [
+                'table' => $table,
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             return response()->json([
                 'msg' => 'Export failed: ' . $e->getMessage(),
                 'status' => 500
