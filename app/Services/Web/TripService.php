@@ -17,15 +17,16 @@ class TripService extends BaseService
     public function index()
     {
         $mainAreas = $this->area->where("type" , "main")->get();
+        $areas = $this->area->get();
         $subAreas = $this->area->where("type" , "sub")->get();
         $airCarriers = $this->model->distinct()->pluck('air_carrier')->filter();
         $serviceProviders = $this->model->distinct()->pluck('service_provider')->filter();
-        return view('web.trip.index', compact('mainAreas', 'subAreas', 'airCarriers', 'serviceProviders'));
+        return view('web.trip.index', compact('mainAreas', 'areas', 'subAreas', 'airCarriers', 'serviceProviders'));
     }
 
     public function indexDatatable()
     {
-        $data = $this->model->with('area')
+        $data = $this->model->with(['area.parent'])
             ->when(request('trip_number'), function ($q) {
                 return $q->where('trip_number', 'like', '%' . request('trip_number') . '%');
             })
@@ -83,6 +84,13 @@ class TripService extends BaseService
             })
             ->editColumn('areas', function ($obj) {
                 return $obj->area->name ?? "-";
+            })
+            ->addColumn('main_area', function ($obj) {
+                if (!$obj->area) {
+                    return "-";
+                }
+
+                return $obj->area->parent->name ?? $obj->area->name;
             })
             ->rawColumns(['actions', 'status'])
             ->make(true);

@@ -34,7 +34,7 @@ class DailyAssignUserAnswer extends BaseModel
 
     public function questionAnswer()
     {
-        return $this->belongsTo(QuestionAnswer::class);
+        return $this->belongsTo(SurveyQuestionAnswer::class, 'question_answer_id');
 
     }
 

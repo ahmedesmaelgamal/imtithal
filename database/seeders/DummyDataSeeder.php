@@ -16,8 +16,6 @@ use App\Models\AreaLocation;
 use App\Models\AreaPoint;
 use App\Models\AreaTeam;
 use App\Models\Attendance;
-use App\Models\Axis;
-use App\Models\AxisQuestion;
 use App\Models\BusReport;
 use App\Models\DailyAssignUserAnswer;
 use App\Models\DailyReport;
@@ -30,7 +28,6 @@ use App\Models\Notice;
 use App\Models\NoticeType;
 use App\Models\Notification;
 use App\Models\PolicyPrivacy;
-use App\Models\QuestionAnswer;
 use App\Models\Room;
 use App\Models\RoomMessage;
 use App\Models\Season;
@@ -39,6 +36,9 @@ use App\Models\SupportChat;
 use App\Models\SupportChatMessage;
 use App\Models\SupportTicket;
 use App\Models\SupportTicketReply;
+use App\Models\Survey;
+use App\Models\SurveyQuestion;
+use App\Models\SurveyQuestionAnswer;
 use App\Models\User;
 use App\Models\Trip;
 use App\Models\UserSetting;
@@ -115,8 +115,8 @@ class DummyDataSeeder extends Seeder
             ]
         ];
 
-        User::create($mainUsers['monitor'])->assignRole('مراقب');
-        User::create($mainUsers['supervisor'])->assignRole('مشرف');
+        User::updateOrCreate(['national_id' => $mainUsers['monitor']['national_id']], $mainUsers['monitor'])->assignRole('مراقب');
+        User::updateOrCreate(['national_id' => $mainUsers['supervisor']['national_id']], $mainUsers['supervisor'])->assignRole('مشرف');
 
 
         $users = User::factory(60)->create();
@@ -155,31 +155,37 @@ class DummyDataSeeder extends Seeder
             }
         }
 
-        // Axes + questions + question answers
-        $axes = Axis::factory(8)->create();
-        $axisQuestions = collect();
-        foreach ($axes as $axis) {
+        // Surveys + questions + question answers
+        $surveys = collect();
+        for ($s = 1; $s <= 8; $s++) {
+            $survey = Survey::query()->create([
+                'title' => "Survey {$s}",
+                'description' => $faker->paragraph(2),
+            ]);
+            $surveys->push($survey);
+        }
+
+        $surveyQuestions = collect();
+        foreach ($surveys as $survey) {
             for ($order = 1; $order <= 6; $order++) {
                 $answerType = (string) $faker->randomElement(TaskQuestionEnum::values());
-                $question = AxisQuestion::query()->create([
+                $question = SurveyQuestion::query()->create([
+                    'survey_id' => $survey->id,
                     'question' => $faker->sentence(8),
-                    'axis_id' => $axis->id,
                     'answer_type' => $answerType,
                     'require_file' => (string) random_int(0, 1),
                     'order_number' => $order,
-                    'true_parent_id' => null,
-                    'false_parent_id' => null,
                 ]);
 
                 if ((int) $answerType === TaskQuestionEnum::MULTIPLE->value) {
                     for ($a = 1; $a <= 4; $a++) {
-                        QuestionAnswer::query()->create([
-                            'axis_question_id' => $question->id,
+                        SurveyQuestionAnswer::query()->create([
+                            'survey_question_id' => $question->id,
                             'answer' => "Option {$a}",
                         ]);
                     }
                 }
-                $axisQuestions->push($question);
+                $surveyQuestions->push($question);
             }
         }
 
@@ -206,14 +212,15 @@ class DummyDataSeeder extends Seeder
 
         // Areas + locations + points + teams
         $areas = collect();
-        foreach ($axes as $axis) {
+        foreach ($surveys as $survey) {
             for ($i = 1; $i <= 3; $i++) {
                 $area = Area::query()->create([
-                    'name' => "{$axis->name} Area {$i}",
+                    'name' => "{$survey->title} Area {$i}",
                     'type' => 'sub',
                     'parent_id' => $mainAreas->random()->id,
                     'season_id' => $season->id,
                 ]);
+                $area->surveys()->attach($survey->id);
                 $areas->push($area);
 
                 AreaLocation::query()->create([
@@ -259,11 +266,11 @@ class DummyDataSeeder extends Seeder
         // Daily reports + assignments + answers
         $dailyReports = collect();
         foreach (range(1, 20) as $i) {
-            $axis = $axes->random();
+            $survey = $surveys->random();
             $dailyReport = DailyReport::query()->create([
                 'title' => "Daily Report {$i}",
                 'description' => $faker->paragraph(3),
-                'axis_id' => $axis->id,
+                'survey_id' => $survey->id,
                 'monitor_type' => (string) random_int(0, 2),
                 'side_type' => (string) random_int(0, 14),
                 'deadline' => now()->addDays(random_int(1, 14))->toDateString(),
@@ -289,21 +296,20 @@ class DummyDataSeeder extends Seeder
                     'user_id' => $assignedUser->id,
                     'deadline' => now()->addDays(random_int(1, 14))->toDateString(),
                     'status' => (string) random_int(0, 4),
-                    'axis_id' => $axis->id,
                     'area_id' => $area->id,
                     'leader_id' => $leaderId,
                 ]);
 
-                $questionsForAxis = $axisQuestions->where('axis_id', $axis->id)->take(4);
-                foreach ($questionsForAxis as $question) {
-                    $pickedAnswer = QuestionAnswer::query()
-                        ->where('axis_question_id', $question->id)
+                $questionsForSurvey = $surveyQuestions->where('survey_id', $survey->id)->take(4);
+                foreach ($questionsForSurvey as $question) {
+                    $pickedAnswer = SurveyQuestionAnswer::query()
+                        ->where('survey_question_id', $question->id)
                         ->inRandomOrder()
                         ->first();
 
                     DailyAssignUserAnswer::query()->create([
                         'daily_report_assign_user_id' => $assignUser->id,
-                        'axis_question_id' => $question->id,
+                        'survey_question_id' => $question->id,
                         'answer' => $faker->sentence(6),
                         'question_answer_id' => $pickedAnswer?->id,
                         'status' => (string) random_int(0, 2),

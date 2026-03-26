@@ -73,8 +73,8 @@
                     </select>
                 </div>
                 <div class="col-md-4 col-12 mb-3">
-                    <label class="form-label fs-14 fw-500 text-primary">المنطقة</label>
-                    <select class="form-select select2-filter" name="area_id">
+                    <label class="form-label fs-14 fw-500 text-primary">المنطقة الرئيسية</label>
+                    <select class="form-select select2-filter" name="main_area_id" id="filterMainArea">
                         <option value="">الكل</option>
                         @foreach($mainAreas as $acc)
                             <option value="{{ $acc->id }}">{{ $acc->name }}</option>
@@ -82,11 +82,11 @@
                     </select>
                 </div>
                 <div class="col-md-4 col-12 mb-3">
-                    <label class="form-label fs-14 fw-500 text-primary">المنطقة</label>
-                    <select class="form-select select2-filter" name="area_id">
+                    <label class="form-label fs-14 fw-500 text-primary">المنطقة الفرعية</label>
+                    <select class="form-select select2-filter" name="area_id" id="filterSubArea">
                         <option value="">الكل</option>
                         @foreach($subAreas as $acc)
-                            <option value="{{ $acc->id }}">{{ $acc->name }}</option>
+                            <option value="{{ $acc->id }}" data-parent-id="{{ $acc->parent_id }}">{{ $acc->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -108,6 +108,7 @@
                     <th class="text-center">الناقل الجوي</th>
                     <th class="text-center">بلد المغادرة</th>
                     <th class="text-center">عدد الحجاج</th>
+                    <th class="text-center">المنطقة الرئيسية</th>
                     <th class="text-center">المنطقة</th>
                     <th class="text-center">مدينة السكن</th>
                     <th class="text-center">تاريخ الوصول</th>
@@ -315,6 +316,45 @@
                 width: '100%',
                 dropdownParent: $('#addTripModal, #editTripModal')
             });
+            const mainAreaSelect = $('#filterMainArea');
+            const subAreaSelect = $('#filterSubArea');
+
+            function filterSubAreasByMainArea() {
+                const selectedMainArea = mainAreaSelect.val();
+                const currentSubArea = subAreaSelect.val();
+
+                subAreaSelect.find('option').each(function () {
+                    const option = $(this);
+                    const optionValue = option.val();
+                    const optionParentId = option.data('parent-id') !== undefined
+                        ? option.data('parent-id').toString()
+                        : '';
+
+                    if (!optionValue) {
+                        option.prop('hidden', false);
+                        return;
+                    }
+
+                    if (!selectedMainArea || optionParentId === selectedMainArea.toString()) {
+                        option.prop('hidden', false);
+                    } else {
+                        option.prop('hidden', true);
+                    }
+                });
+
+                if (
+                    currentSubArea &&
+                    selectedMainArea &&
+                    subAreaSelect.find(`option[value="${currentSubArea}"]`).prop('hidden')
+                ) {
+                    subAreaSelect.val('');
+                }
+
+                subAreaSelect.trigger('change.select2');
+            }
+
+            mainAreaSelect.on('change', filterSubAreasByMainArea);
+            filterSubAreasByMainArea();
 
             // DataTable Initialization
             let tripTable = $('#trip-table').DataTable({
@@ -340,6 +380,7 @@
                     { data: 'air_carrier', name: 'air_carrier' },
                     { data: 'departure_country', name: 'departure_country' },
                     { data: 'hajjis_count', name: 'hajjis_count' },
+                    { data: 'main_area', name: 'main_area' },
                     { data: 'areas', name: 'areas' },
                     { data: 'residence_city', name: 'residence_city' },
                     { data: 'arrival_date', name: 'arrival_date' },
@@ -551,8 +592,6 @@
         });
     </script>
 @endsection
-
-
 
 
 

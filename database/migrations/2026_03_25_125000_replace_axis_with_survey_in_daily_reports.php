@@ -38,6 +38,11 @@ return new class extends Migration {
         });
         Schema::table('daily_assign_user_answers', function (Blueprint $table) {
             $table->foreign('survey_question_id')->references('id')->on('servay_questions')->cascadeOnDelete()->cascadeOnUpdate();
+            
+            if (Schema::hasColumn('daily_assign_user_answers', 'question_answer_id')) {
+                $table->dropForeign(['question_answer_id']);
+                $table->foreign('question_answer_id')->references('id')->on('survey_question_answers')->cascadeOnDelete()->cascadeOnUpdate();
+            }
         });
     }
 
@@ -53,6 +58,11 @@ return new class extends Migration {
         });
         Schema::table('daily_assign_user_answers', function (Blueprint $table) {
             $table->foreign('axis_question_id')->references('id')->on('axis_questions')->cascadeOnDelete()->cascadeOnUpdate();
+            
+            if (Schema::hasColumn('daily_assign_user_answers', 'question_answer_id')) {
+                $table->dropForeign(['question_answer_id']);
+                $table->foreign('question_answer_id')->references('id')->on('question_answers')->cascadeOnDelete()->cascadeOnUpdate();
+            }
         });
 
         // Reverse daily_report_assign_users
